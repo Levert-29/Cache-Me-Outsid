@@ -1,5 +1,17 @@
 import { Resend } from "resend"
 
+const htmlEntities: Record<string, string> = {
+  '&': '&amp;',
+  '<': '&lt;',
+  '>': '&gt;',
+  '"': '&quot;',
+  "'": '&#39;',
+}
+
+export function escapeHtml(value: string) {
+  return value.replace(/[&<>"']/g, (character) => htmlEntities[character])
+}
+
 function getResendClient() {
   const apiKey = process.env.RESEND_API_KEY
   return apiKey ? new Resend(apiKey) : null
@@ -62,13 +74,13 @@ export function getAppointmentConfirmationEmail(params: {
           <h1>Appointment Confirmed</h1>
         </div>
         <div class="content">
-          <p>Dear ${params.patientName},</p>
+          <p>Dear ${escapeHtml(params.patientName)},</p>
           <p>Your appointment at Campus Clinic has been confirmed.</p>
           
           <div class="details">
-            <p><strong>Doctor:</strong> Dr. ${params.doctorName}</p>
-            <p><strong>Date:</strong> ${params.date}</p>
-            <p><strong>Time:</strong> ${params.time}</p>
+            <p><strong>Doctor:</strong> Dr. ${escapeHtml(params.doctorName)}</p>
+            <p><strong>Date:</strong> ${escapeHtml(params.date)}</p>
+            <p><strong>Time:</strong> ${escapeHtml(params.time)}</p>
           </div>
           
           <p><strong>Important Reminders:</strong></p>
@@ -115,13 +127,13 @@ export function getAppointmentReminderEmail(params: {
           <h1>Appointment Reminder</h1>
         </div>
         <div class="content">
-          <p>Dear ${params.patientName},</p>
+          <p>Dear ${escapeHtml(params.patientName)},</p>
           <p>This is a friendly reminder about your upcoming appointment at Campus Clinic.</p>
           
           <div class="details">
-            <p><strong>Doctor:</strong> Dr. ${params.doctorName}</p>
-            <p><strong>Date:</strong> ${params.date}</p>
-            <p><strong>Time:</strong> ${params.time}</p>
+            <p><strong>Doctor:</strong> Dr. ${escapeHtml(params.doctorName)}</p>
+            <p><strong>Date:</strong> ${escapeHtml(params.date)}</p>
+            <p><strong>Time:</strong> ${escapeHtml(params.time)}</p>
           </div>
           
           <p><strong>Please remember to:</strong></p>
@@ -168,13 +180,13 @@ export function getAppointmentCancellationEmail(params: {
           <h1>Appointment Cancelled</h1>
         </div>
         <div class="content">
-          <p>Dear ${params.patientName},</p>
+          <p>Dear ${escapeHtml(params.patientName)},</p>
           <p>Your appointment at Campus Clinic has been cancelled.</p>
           
           <div class="details">
-            <p><strong>Doctor:</strong> Dr. ${params.doctorName}</p>
-            <p><strong>Date:</strong> ${params.date}</p>
-            <p><strong>Time:</strong> ${params.time}</p>
+            <p><strong>Doctor:</strong> Dr. ${escapeHtml(params.doctorName)}</p>
+            <p><strong>Date:</strong> ${escapeHtml(params.date)}</p>
+            <p><strong>Time:</strong> ${escapeHtml(params.time)}</p>
           </div>
           
           <p>If you still need medical attention, please book a new appointment through the Campus Clinic Appointment System.</p>
